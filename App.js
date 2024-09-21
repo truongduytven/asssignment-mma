@@ -12,34 +12,35 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        screenOptions={{ headerShown: false }}
-        tabBarOptions={{
-          activeTintColor: 'red',
-          inactiveTintColor: 'gray',
-          showLabel: true,
-          labelStyle: { fontSize: 12 },
-          style: { backgroundColor: 'white' }
-        }}
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarActiveTintColor: 'red',
+          tabBarInactiveTintColor: 'gray',
+          tabBarShowLabel: true,
+          tabBarLabelStyle: { fontSize: 12 },
+          tabBarStyle: [{ display: 'flex' }, null],
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'Favorite') {
+              iconName = 'heart';
+            }
+
+            return <Icon name={iconName} color={color} size={size} />;
+          },
+        })}
       >
         <Tab.Screen
           name="Home"
           component={HomePage}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="home" color={color} size={size} />
-            ),
-          }}
+          options={{ tabBarLabel: 'Home' }}
         />
         <Tab.Screen
-          name="Settings"
+          name="Favorite"
           component={FavoritePage}
-          options={{
-            tabBarLabel: 'Favorite list',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="heart" color={color} size={size} />
-            ),
-          }}
+          options={{ tabBarLabel: 'Favorite list' }}
         />
       </Tab.Navigator>
       <StatusBar style="auto" />
