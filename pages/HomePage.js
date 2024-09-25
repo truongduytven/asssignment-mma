@@ -7,8 +7,7 @@ export default function HomePage() {
   const [DataEx, setDataEx] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); // Track the search query
-
+  const [searchQuery, setSearchQuery] = useState(""); 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch('http://65459186fe036a2fa9546e52.mockapi.io/api/v1/Data');
