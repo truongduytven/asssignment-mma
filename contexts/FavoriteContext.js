@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Create a Context for managing the liked products
+
 export const FavoriteContext = createContext();
 
 export const FavoriteProvider = ({ children }) => {
@@ -32,21 +32,20 @@ export const FavoriteProvider = ({ children }) => {
     saveFavorites();
   }, [favorites]);
 
-  // Function to add or remove a product from favorites
   const toggleFavorite = (product) => {
     setFavorites((prevFavorites) => {
       if (prevFavorites.some((fav) => fav.id === product.id)) {
-        // If product is already liked, remove it
+        
         return prevFavorites.filter((fav) => fav.id !== product.id);
       } else {
-        // Otherwise, add it to the liked products
+        
         return [...prevFavorites, product];
       }
     });
   };
 
   return (
-    <FavoriteContext.Provider value={{ favorites, toggleFavorite }}>
+    <FavoriteContext.Provider value={{ favorites, toggleFavorite, setFavorites }}>
       {children}
     </FavoriteContext.Provider>
   );

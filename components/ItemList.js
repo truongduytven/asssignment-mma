@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3,
     position: 'relative',
+    backgroundColor: '#fff',
   },
   imageWrapper: {
     width: 150,

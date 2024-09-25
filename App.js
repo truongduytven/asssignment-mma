@@ -4,8 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeStack from './pages/HomeStack';
-import FavoritePage from './pages/FavoritePage';
 import { FavoriteProvider } from './contexts/FavoriteContext';
+import FavoriteStack from './pages/FavoriteStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,12 +36,12 @@ export default function App() {
         >
           <Tab.Screen
             name="Home"
-            component={HomeStack} // Use HomeStack instead of HomePage
+            component={HomeStack}
             options={{ tabBarLabel: 'Home' }}
           />
           <Tab.Screen
             name="Favorite"
-            component={FavoritePage}
+            component={FavoriteStack}
             options={{ tabBarLabel: 'Favorite list' }}
           />
         </Tab.Navigator>
