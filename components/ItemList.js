@@ -32,6 +32,7 @@ export default function ItemList({ data }) {
         />
       </View>
       <Text>{data.artName}</Text>
+      {/* <Text>{(data.price - (data.price*data.limitedTimeDeal)).toFixed(2)}$</Text> */}
     </TouchableOpacity>
   );
 }

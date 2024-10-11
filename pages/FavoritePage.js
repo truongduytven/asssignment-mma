@@ -1,17 +1,42 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 import { FavoriteContext } from '../contexts/FavoriteContext';
 import ItemList from '../components/ItemList';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default function FavoritePage() {
-  const { favorites, setFavorites } = useContext(FavoriteContext); 
+  const { favorites, setFavorites } = useContext(FavoriteContext);
   const [modalVisible, setModalVisible] = useState(false);
-
-
+  const [loading, setLoading] = useState(true);
   const clearFavorites = () => {
-    setFavorites([]); 
-    setModalVisible(false); 
+    setFavorites([]);
+    setModalVisible(false);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://65459186fe036a2fa9546e52.mockapi.io/api/v1/Data');
+        const data = await response.json();
+        if(favorites.length !== 0){
+          let fav = [];
+          for (let i = 0; i < favorites.length; i++) {
+            for (let j = 0; j < data.length; j++) {
+              if (favorites[i].id === data[j].id) {
+                fav.push(favorites[i]);
+              }
+            }
+          }
+          setFavorites(fav);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const renderModal = () => (
     <Modal
@@ -42,13 +67,18 @@ export default function FavoritePage() {
     </Modal>
   );
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#f00530" />
+        <Text>Loading products...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {favorites.length > 0 && (
-        <TouchableOpacity style={styles.removeButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.removeButtonText}>Remove All</Text>
-        </TouchableOpacity>
-      )}
+      
 
       {favorites.length === 0 ? (
         <Text style={styles.emptyText}>No favorites added yet.</Text>
@@ -57,13 +87,19 @@ export default function FavoritePage() {
           numColumns={2}
           columnWrapperStyle={styles.row}
           data={favorites}
-          renderItem={({ item }) => <ItemList data={item} />} // User can click to see product details
+          renderItem={({ item }) => <ItemList data={item} />}
           keyExtractor={(item) => item.id.toString()}
         />
-  )
-}
+      )
+      }
 
-{ renderModal() }
+      {(favorites.length > 0 && favorites.length !== 1) && (
+        <TouchableOpacity style={styles.removeButton} onPress={() => setModalVisible(true)}>
+          <Text style={styles.removeButtonText}>Remove All</Text>
+        </TouchableOpacity>
+      )}
+
+      {renderModal()}
     </View >
   );
 }
@@ -84,6 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f00',
     padding: 10,
     marginBottom: 10,
+    marginHorizontal: 10,
     borderRadius: 5,
     alignItems: 'center',
   },
@@ -139,5 +176,11 @@ const styles = StyleSheet.create({
   },
   row: {
     justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
